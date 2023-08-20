@@ -18,6 +18,4 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-console.log("Firebase Config:", firebaseConfig);
-
 export { app, db, auth, storage };
