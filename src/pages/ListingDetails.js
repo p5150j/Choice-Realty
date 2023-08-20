@@ -360,5 +360,3 @@ function ListingDetails() {
 }
 
 export default ListingDetails;
-
-// maps api key AIzaSyA1IdaBurmqy0Tg4U_KjBvLkW6HVxtz-JI
