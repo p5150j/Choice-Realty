@@ -1,0 +1,32 @@
+/* custom-quill-styles.css */
+
+.ql-editor {
+    @apply prose prose-lg;
+  
+    h1 {
+      @apply text-4xl font-bold text-gray-800;
+    }
+  
+    h2 {
+      @apply text-3xl font-semibold text-gray-700;
+    }
+  
+    h3 {
+      @apply text-2xl text-gray-600;
+    }
+  
+    p {
+      @apply text-base text-gray-500;
+    }
+  
+    ul {
+      @apply list-disc pl-5;
+    }
+  
+    li {
+      @apply mb-2;
+    }
+  
+    /* ... and so on for other elements as needed */
+  }
+  
