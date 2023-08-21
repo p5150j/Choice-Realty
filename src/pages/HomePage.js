@@ -8,6 +8,18 @@ function HomePage() {
   const [properties, setProperties] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const priceRanges = [
+    "$0-100,000",
+    "$100,000-200,000",
+    "$200,000-300,000",
+    "$300,000-400,000",
+    "$400,000-500,000",
+    "$500,000-600,000",
+    "$600,000-700,000",
+    "$700,000-800,000",
+    "$800,000-900,000",
+  ];
+
   useEffect(() => {
     const fetchProperties = async () => {
       const propertiesCollection = collection(db, "properties");
@@ -79,9 +91,10 @@ function HomePage() {
             className="font-nunito"
             style={{
               padding: "20px 40px",
+              backgroundColor: "rgb(248, 87, 87)",
               borderRadius: "12px",
               color: "white",
-              backgroundColor: "rgb(31, 105, 255)",
+
               boxShadow: "0 2px 12px 0 rgba(20, 20, 43, 0.07)",
               transform: "scale3d(1, 1, 1.01)",
 
@@ -105,7 +118,7 @@ function HomePage() {
       <div className="bg-gray-100 p-4 rounded mb-16">
         <div className="grid grid-cols-1 md:grid-cols-6 gap-2">
           {/* Search Text Input with Icon */}
-          <div className="relative mt-2 md:mt-0 md:col-span-2">
+          <div className="relative mt-2 md:mt-0 md:col-span-6">
             <input
               type="text"
               placeholder="Search properties..."
@@ -120,43 +133,15 @@ function HomePage() {
             <ion-icon
               name="search"
               class="absolute left-5 top-1/2 transform -translate-y-1/2 text-xl"
+              title="Search by location, name, or description"
             ></ion-icon>
-          </div>
-
-          {/* Bedrooms Dropdown */}
-          <div className="relative mt-2 md:mt-0 md:col-span-2">
-            <select
-              className="border h-20 pl-20 pr-32 rounded-xl bg-white shadow-md w-full"
-              style={{
-                borderColor: "#fff",
-                boxShadow: "2px 2px 20px 0 rgba(8, 15, 52, 0.06)",
-              }}
-            >
-              <option value="">Bedrooms</option>
-              {/* Add bedroom options here */}
-            </select>
-            <ion-icon
-              name="bed-outline"
-              class="absolute left-5 top-1/2 transform -translate-y-1/2 text-xl"
-            ></ion-icon>
-          </div>
-
-          {/* Price Range Dropdown with Icon */}
-          <div className="relative mt-2 md:mt-0 md:col-span-2">
-            <select
-              className="border h-20 pl-20 pr-32 rounded-xl bg-white shadow-md w-full"
-              style={{
-                borderColor: "#fff",
-                boxShadow: "2px 2px 20px 0 rgba(8, 15, 52, 0.06)",
-              }}
-            >
-              <option value="">Select Price Range</option>
-              {/* Add price ranges here */}
-            </select>
-            <ion-icon
-              name="pricetag-outline"
-              class="absolute left-5 top-1/2 transform -translate-y-1/2 text-xl"
-            ></ion-icon>
+            {searchQuery && (
+              <ion-icon
+                name="close-outline"
+                class="absolute right-5 top-1/2 transform -translate-y-1/2 text-xl cursor-pointer"
+                onClick={() => setSearchQuery("")}
+              ></ion-icon>
+            )}
           </div>
         </div>
       </div>
@@ -173,39 +158,50 @@ function HomePage() {
                   .toLowerCase()
                   .includes(searchQuery.toLowerCase()) ||
                 prop.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                prop.state.toLowerCase().includes(searchQuery.toLowerCase())
+                prop.state.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                prop.bedrooms.toString().includes(searchQuery) ||
+                prop.price.toString().includes(searchQuery)
               );
             })
             .map((prop) => (
               <Link to={`/listing/${prop.id}`} key={prop.id}>
-                <div className="border rounded-2xl bg-white shadow-md mb-4 flex w-full h-72 hover:shadow-lg transition-shadow duration-300">
-                  <img
-                    src={prop.images[0]}
-                    alt={prop.title}
-                    className="w-1/2 h-full object-cover rounded-l-2xl"
-                  />
-                  <div className="p-4 w-1/2 space-y-2 relative flex flex-col">
-                    <div className="flex items-start space-x-2 mt-2">
-                      <ion-icon
-                        name="location-outline"
-                        className="text-xl mt-1"
-                      ></ion-icon>
-                      <div>
-                        <span className="text-sm block">{prop.address}</span>
-                        <span className="text-sm">{`${prop.city}, ${prop.state}`}</span>
-                      </div>
-                    </div>
-                    <h2 className="text-lg font-bold truncate">{prop.title}</h2>
-                    <p className="text-xs text-gray-600 truncate flex-grow">
-                      {prop.description}
-                    </p>
-                    <div className="mt-2 space-x-2">
-                      <span className="bg-gray-200 text-xs px-2 py-1 rounded-full">{`${prop.sqft} sqft`}</span>
-                      <span className="bg-gray-200 text-xs px-2 py-1 rounded-full">{`${prop.bedrooms} Beds`}</span>
-                      <span className="bg-gray-200 text-xs px-2 py-1 rounded-full">{`${prop.bathrooms} Baths`}</span>
-                    </div>
-                    <div className="absolute top-2 right-2 text-sm font-semibold">
+                <div className="border rounded-2xl bg-white shadow-md mb-6 flex w-full h-80 hover:shadow-lg transition-shadow duration-300">
+                  <div className="w-1/2 h-full overflow-hidden rounded-l-2xl">
+                    {" "}
+                    {/* Container for image with overflow hidden */}
+                    <img
+                      src={prop.images[0]}
+                      alt={prop.title}
+                      className="w-full h-full object-cover transform transition-transform duration-300 hover:scale-110"
+                    />
+                  </div>
+                  <div className="p-6 w-1/2 space-y-4 relative flex flex-col justify-between">
+                    <div
+                      className="absolute top-2 right-2 text-xl font-bold"
+                      style={{ color: "#f85757" }}
+                    >
                       ${prop.price}
+                    </div>
+                    <div className="flex flex-col space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <ion-icon name="location-outline"></ion-icon>
+                        <span className="text-sm block">{`${prop.address}`}</span>
+                      </div>
+                      <h2 className="text-xl font-bold truncate">
+                        {prop.title}
+                      </h2>
+                      <p className="text-base text-gray-600 flex-grow overflow-hidden h-[6em] -webkit-line-clamp-2 -webkit-box-orient-vertical display[-webkit-box]">
+                        {prop.description}
+                      </p>
+                    </div>
+
+                    <div>
+                      <hr className="border-gray-300 my-2" />
+                      <div className="space-x-2">
+                        <span className="bg-[rgb(248,87,87)] text-white text-xs px-2 py-1 rounded-full">{`${prop.sqft} sqft`}</span>
+                        <span className="bg-[rgb(248,87,87)] text-white text-xs px-2 py-1 rounded-full">{`${prop.bedrooms} Beds`}</span>
+                        <span className="bg-[rgb(248,87,87)] text-white text-xs px-2 py-1 rounded-full">{`${prop.bathrooms} Baths`}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
