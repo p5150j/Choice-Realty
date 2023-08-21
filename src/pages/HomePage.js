@@ -165,17 +165,15 @@ function HomePage() {
             })
             .map((prop) => (
               <Link to={`/listing/${prop.id}`} key={prop.id}>
-                <div className="border rounded-2xl bg-white shadow-md mb-6 flex w-full h-80 hover:shadow-lg transition-shadow duration-300">
-                  <div className="w-1/2 h-full overflow-hidden rounded-l-2xl">
-                    {" "}
-                    {/* Container for image with overflow hidden */}
+                <div className="border rounded-2xl bg-white shadow-md mb-6 md:flex block w-full h-auto md:h-80 hover:shadow-lg transition-shadow duration-300">
+                  <div className="md:w-1/2 w-full h-48 md:h-full overflow-hidden rounded-t-2xl md:rounded-l-2xl">
                     <img
                       src={prop.images[0]}
                       alt={prop.title}
                       className="w-full h-full object-cover transform transition-transform duration-300 hover:scale-110"
                     />
                   </div>
-                  <div className="p-6 w-1/2 space-y-4 relative flex flex-col justify-between">
+                  <div className="p-6 md:w-1/2 w-full space-y-4 relative flex flex-col justify-between">
                     <div
                       className="absolute top-2 right-2 text-xl font-bold"
                       style={{ color: "#f85757" }}

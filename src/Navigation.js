@@ -65,15 +65,18 @@ function Navigation() {
       <div className="container mx-auto">
         <div className="flex justify-between items-center">
           {/* Brand */}
-          <Link to="/" className="flex items-center space-x-4">
+          <Link
+            to="/"
+            className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 space-x-0 md:space-x-4"
+          >
+            <span className="text-lg md:text-xl hover:text-blue-300">
+              Alexia Manweiler
+            </span>
             <img
               src="/ColdwellBankerLogoVector.svg"
               alt="Coldwell Banker Logo"
-              className="h-8 w-auto"
+              className="hidden md:block h-8 w-auto"
             />
-            <span className="text-xl font-bold hover:text-blue-300">
-              Alexia Manweiler
-            </span>
           </Link>
 
           {/* Desktop Menu */}
