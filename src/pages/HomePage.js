@@ -8,18 +8,6 @@ function HomePage() {
   const [properties, setProperties] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const priceRanges = [
-    "$0-100,000",
-    "$100,000-200,000",
-    "$200,000-300,000",
-    "$300,000-400,000",
-    "$400,000-500,000",
-    "$500,000-600,000",
-    "$600,000-700,000",
-    "$700,000-800,000",
-    "$800,000-900,000",
-  ];
-
   useEffect(() => {
     const fetchProperties = async () => {
       const propertiesCollection = collection(db, "properties");
@@ -75,42 +63,67 @@ function HomePage() {
         />
       </Helmet>
       {/* Hero Section */}
-      <div className="hidden md:grid grid-cols-2 gap-8 mb-16">
-        <div>
-          <h1 className="text-4xl font-bold mb-4">
+      <div className="grid md:grid-cols-6 grid-cols-1 gap-4 md:gap-8 mb-16 p-4 md:p-0">
+        <div className="md:col-span-3 flex flex-col justify-center mb-6 md:mb-0">
+          <h1 className="text-3xl md:text-4xl font-bold leading-tight tracking-wide mb-4">
             The best place to find your dream house.
           </h1>
-          <p className="mb-8">
+          <p className="text-base leading-relaxed mb-6 md:mb-8">
             Lexi is ready to help with your homebuying and selling needs. As a
             proud member of the Coldwell Banker 1st Choice Realty family, Lexi
             carries the values of hard work, integrity, and outstanding client
             service into everything she does.
           </p>
-
           <button
-            className="font-nunito"
             style={{
-              padding: "20px 40px",
+              width: "100%",
+              maxWidth: 200,
+              padding: "15px 30px",
               backgroundColor: "rgb(248, 87, 87)",
               borderRadius: "12px",
               color: "white",
-
-              boxShadow: "0 2px 12px 0 rgba(20, 20, 43, 0.07)",
+              boxShadow: "rgba(20, 20, 43, 0.07) 0px 2px 12px 0px",
               transform: "scale3d(1, 1, 1.01)",
-
               transition:
-                "box-shadow 300ms ease, color 300ms ease, background-color 300ms ease, transform 300ms ease",
+                "box-shadow 300ms ease 0s, color 300ms ease 0s, background-color 300ms ease 0s, transform 300ms ease 0s",
             }}
           >
             Learn More
           </button>
         </div>
-        <div>
-          <img
-            src="https://images.unsplash.com/photo-1565182999561-18d7dc61c393?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
-            alt="Real Estate"
-            className="w-full h-full object-cover"
-          />
+        <div className="md:col-span-3 grid grid-cols-2 gap-4 relative overflow-hidden">
+          <div className="relative pb-4">
+            <img
+              src="https://images.unsplash.com/photo-1565182999561-18d7dc61c393"
+              alt="Real Estate 1"
+              className="shadow-lg w-full object-cover slide-in-up parallax-image rounded-xl"
+              style={{ animationDelay: "0.2s" }}
+            />
+          </div>
+          <div className="relative pt-4">
+            <img
+              src="https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1474&q=80"
+              alt="Real Estate 2"
+              className="shadow-lg w-full object-cover slide-in-down parallax-image rounded-xl"
+              style={{ animationDelay: "0.3s" }}
+            />
+          </div>
+          <div className="relative">
+            <img
+              src="https://images.unsplash.com/photo-1560184897-ae75f418493e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+              alt="Real Estate 3"
+              className="shadow-lg w-full object-cover slide-in-up parallax-image rounded-xl"
+              style={{ animationDelay: "0.4s" }}
+            />
+          </div>
+          <div className="relative">
+            <img
+              src="https://images.unsplash.com/photo-1629236714692-9dddb8ebe990?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80"
+              alt="Real Estate 4"
+              className="shadow-lg w-full object-cover slide-in-down parallax-image rounded-xl"
+              style={{ animationDelay: "0.5s" }}
+            />
+          </div>
         </div>
       </div>
 
@@ -122,7 +135,7 @@ function HomePage() {
             <input
               type="text"
               placeholder="Search properties..."
-              className="border h-20 pl-20 pr-32 rounded-xl bg-white shadow-md w-full"
+              className="border h-20 pl-20 pr-32 rounded-xl bg-white shadow-md w-full text-lg font-medium"
               style={{
                 borderColor: "#fff",
                 boxShadow: "2px 2px 20px 0 rgba(8, 15, 52, 0.06)",
@@ -147,8 +160,8 @@ function HomePage() {
       </div>
 
       {/* Featured Properties */}
-      <div>
-        <h2 className="text-2xl font-bold mb-4">Featured Properties</h2>
+      <div class="p-4 md:p-0">
+        <h2 className="text-2xl font-semibold mb-4">Featured Properties</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {properties
             .filter((prop) => {
@@ -165,14 +178,15 @@ function HomePage() {
             })
             .map((prop) => (
               <Link to={`/listing/${prop.id}`} key={prop.id}>
-                <div className="border rounded-2xl bg-white shadow-md mb-6 md:flex block w-full h-auto md:h-80 hover:shadow-lg transition-shadow duration-300">
-                  <div className="md:w-1/2 w-full h-48 md:h-full overflow-hidden rounded-t-2xl md:rounded-l-2xl">
+                <div className="border rounded-2xl bg-white shadow-md mb-6 md:flex block w-full h-auto md:h-72 hover:shadow-lg transition-shadow duration-300">
+                  <div className="md:w-1/2 w-full h-48 md:h-full overflow-hidden rounded-l-2xl">
                     <img
                       src={prop.images[0]}
                       alt={prop.title}
                       className="w-full h-full object-cover transform transition-transform duration-300 hover:scale-110"
                     />
                   </div>
+
                   <div className="p-6 md:w-1/2 w-full space-y-4 relative flex flex-col justify-between">
                     <div
                       className="absolute top-2 right-2 text-xl font-bold"
@@ -188,7 +202,7 @@ function HomePage() {
                       <h2 className="text-xl font-bold truncate">
                         {prop.title}
                       </h2>
-                      <p className="text-base text-gray-600 flex-grow overflow-hidden h-[6em] -webkit-line-clamp-2 -webkit-box-orient-vertical display[-webkit-box]">
+                      <p className="text-base leading-relaxed text-gray-600 flex-grow overflow-hidden line-clamp-4">
                         {prop.description}
                       </p>
                     </div>

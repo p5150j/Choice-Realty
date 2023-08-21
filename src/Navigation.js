@@ -67,16 +67,16 @@ function Navigation() {
           {/* Brand */}
           <Link
             to="/"
-            className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 space-x-0 md:space-x-4"
+            className="flex items-center space-x-4 md:space-x-6 mx-auto md:mx-0"
           >
-            <span className="text-lg md:text-xl hover:text-blue-300">
-              Alexia Manweiler
-            </span>
             <img
               src="/ColdwellBankerLogoVector.svg"
               alt="Coldwell Banker Logo"
-              className="hidden md:block h-8 w-auto"
+              className="h-8 w-auto"
             />
+            <span className="hidden md:block text-xl font-semibold hover:text-blue-300">
+              Alexia Manweiler
+            </span>
           </Link>
 
           {/* Desktop Menu */}

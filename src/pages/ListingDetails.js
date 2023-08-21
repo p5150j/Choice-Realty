@@ -159,7 +159,7 @@ function ListingDetails() {
   console.log("Latitude:", property.lat, "Longitude:", property.lng);
 
   return (
-    <div className="relative">
+    <div className="relative p-4 md:p-0">
       {/* Hero Image */}
       <img
         src={property.images[0]}

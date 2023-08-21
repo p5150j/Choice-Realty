@@ -3,3 +3,46 @@
 @tailwind utilities;
 
 
+@keyframes slideInUp {
+    0% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+}
+
+@keyframes slideInDown {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+}
+
+.slide-in-up {
+    transform: translateY(100%); /* Initial position */
+    opacity: 0; /* Initial opacity */
+    animation: slideInUp 2s forwards;
+}
+
+.slide-in-down {
+    transform: translateY(-100%); /* Initial position */
+    opacity: 0; /* Initial opacity */
+    animation: slideInDown 1s forwards;
+}
+
+.parallax-image {
+    /* ... other properties ... */
+    transition: transform 0.3s; /* This ensures smooth scaling */
+}
+
+.parallax-image:hover {
+    transform: scale(1.1); /* This scales the image up by 10% on hover */
+}
+
