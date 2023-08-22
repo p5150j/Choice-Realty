@@ -28,7 +28,12 @@ function ArticleDetail() {
     fetchArticle();
   }, [id]);
 
-  if (!article) return <div>Loading...</div>;
+  if (!article)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="w-32 h-32 border-t-8 border-[rgb(248,87,87)] border rounded-full animate-spin"></div>
+      </div>
+    );
 
   return (
     <div className="container mx-auto p-4">

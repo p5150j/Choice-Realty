@@ -154,7 +154,12 @@ function ListingDetails() {
     );
   };
 
-  if (!property) return <div>Loading...</div>;
+  if (!property)
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="w-32 h-32 border-t-8 border-[rgb(248,87,87)] border rounded-full animate-spin"></div>
+      </div>
+    );
 
   console.log("Latitude:", property.lat, "Longitude:", property.lng);
 
