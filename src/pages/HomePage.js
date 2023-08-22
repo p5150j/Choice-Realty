@@ -74,8 +74,10 @@ function HomePage() {
             carries the values of hard work, integrity, and outstanding client
             service into everything she does.
           </p>
-          <button
+          <Link
+            to="/about"
             style={{
+              display: "inline-block",
               width: "100%",
               maxWidth: 200,
               padding: "15px 30px",
@@ -86,10 +88,11 @@ function HomePage() {
               transform: "scale3d(1, 1, 1.01)",
               transition:
                 "box-shadow 300ms ease 0s, color 300ms ease 0s, background-color 300ms ease 0s, transform 300ms ease 0s",
+              textAlign: "center", // To center the text
             }}
           >
             Learn More
-          </button>
+          </Link>
         </div>
         <div className="md:col-span-3 grid grid-cols-2 gap-4 relative overflow-hidden">
           <div className="relative pb-4">

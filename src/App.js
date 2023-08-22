@@ -11,6 +11,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AddArticle from "./pages/AddArticle";
 import Articles from "./pages/Articles";
 import ArticleDetail from "./pages/ArticleDetail";
+import AboutPage from "./pages/AboutPage";
 
 import Navigation from "./Navigation";
 
@@ -32,6 +33,7 @@ function App() {
               <Route path="/add-article" element={<AddArticle />} />
               <Route path="/articles" element={<Articles />} />
               <Route path="/article/:id" element={<ArticleDetail />} />
+              <Route path="/about" element={<AboutPage />} />
             </Routes>
           </div>
         </div>
