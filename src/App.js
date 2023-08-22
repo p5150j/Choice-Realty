@@ -2,7 +2,6 @@ import React from "react";
 import app from "./firebase";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { LoadScript } from "@react-google-maps/api";
-
 import HomePage from "./pages/HomePage";
 import ListingDetails from "./pages/ListingDetails";
 import LoginPage from "./pages/LoginPage";

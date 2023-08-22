@@ -1,8 +1,49 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 
 function AboutPage() {
   return (
     <div className="container mx-auto p-8">
+      <Helmet>
+        <title>
+          About Alexia Manweiler - Coldwell Banker 1st Choice Realty
+        </title>
+        <meta
+          name="description"
+          content="Learn more about Lexi Manweiler, an esteemed graduate of Woodland Park High School and a distinguished realtor with Coldwell Banker 1st Choice Realty."
+        />
+
+        {/* OpenGraph tags for Facebook */}
+        <meta
+          property="og:title"
+          content="About Alexia Manweiler - Coldwell Banker 1st Choice Realty"
+        />
+        <meta
+          property="og:description"
+          content="Discover the journey and expertise of Lexi Manweiler in the realm of real estate in the Pikes Peak area."
+        />
+        <meta
+          property="og:image"
+          content="https://www.coldwellbanker.com/_next/image?url=https%3A%2F%2Fimages.cloud.realogyprod.com%2Fagents%2FCBR%2FP00200000GFj297Ez8dMNdGF2sr1SAkfXiN2aJCR%2FP01600000GGSGyijYQ9cHVGEpxqvBoeGEG4NXWdV.jpg%3Fwidth%3D400&w=1920&q=75"
+        />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:type" content="website" />
+
+        {/* Twitter Card tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="About Alexia Manweiler - Coldwell Banker 1st Choice Realty"
+        />
+        <meta
+          name="twitter:description"
+          content="Discover the journey and expertise of Lexi Manweiler in the realm of real estate in the Pikes Peak area."
+        />
+        <meta
+          name="twitter:image"
+          content="https://www.coldwellbanker.com/_next/image?url=https%3A%2F%2Fimages.cloud.realogyprod.com%2Fagents%2FCBR%2FP00200000GFj297Ez8dMNdGF2sr1SAkfXiN2aJCR%2FP01600000GGSGyijYQ9cHVGEpxqvBoeGEG4NXWdV.jpg%3Fwidth%3D400&w=1920&q=75"
+        />
+      </Helmet>
       <div className="flex flex-wrap mb-10">
         {/* Left Side: Image and Info */}
         <div className="w-full md:w-2/3 p-4">
