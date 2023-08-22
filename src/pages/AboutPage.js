@@ -1,7 +1,57 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
 
 function AboutPage() {
+  const [toastMessage, setToastMessage] = useState(null);
+  const formRef = useRef(null);
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+
+    // Capture the form data
+    const formData = new FormData(event.target);
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const phone = formData.get("phone");
+    const message = formData.get("message");
+
+    // Send data to Firebase Cloud Function
+    try {
+      const response = await fetch(
+        "https://us-central1-lexi-b90dd.cloudfunctions.net/sendEmail",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            phone,
+            message,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        console.log("Email sent successfully.");
+        setToastMessage("Email sent successfully.");
+        formRef.current.reset(); // Reset the form values
+        setTimeout(() => {
+          setToastMessage(null);
+        }, 3000); // Clears the toast after 3 seconds
+      } else {
+        console.error("Error sending email:", result.error);
+        // Show an error message to the user.
+      }
+    } catch (error) {
+      console.error("Failed to send email:", error);
+      // Show an error message to the user.
+    }
+  };
+
   return (
     <div className="container mx-auto p-8">
       <Helmet>
@@ -135,61 +185,104 @@ function AboutPage() {
         </div>
         {/* Right Side: Contact Form as a Card */}
         <div className="w-full md:w-1/3 p-4">
-          <div className="p-6 bg-white shadow-lg rounded-lg">
-            <h2 className="text-xl font-bold mb-4">Contact Alexia</h2>
-            <form>
-              <div className="mb-4">
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold mb-4">Contact the Agent</h3>
+            <form
+              className="space-y-4"
+              onSubmit={handleFormSubmit}
+              ref={formRef}
+            >
+              <div>
                 <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="name"
+                  className="block text-sm font-medium text-gray-700"
                 >
                   Name
                 </label>
                 <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="name"
                   type="text"
-                  placeholder="Your Name"
+                  id="name"
+                  name="name"
+                  className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
-              <div className="mb-4">
+              <div>
                 <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
                   htmlFor="email"
+                  className="block text-sm font-medium text-gray-700"
                 >
                   Email
                 </label>
                 <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="email"
                   type="email"
-                  placeholder="Your Email"
+                  id="email"
+                  name="email"
+                  className="mt-1 p-2 w-full border rounded-md"
                 />
               </div>
-              <div className="mb-4">
+              <div>
                 <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
+                  htmlFor="phone"
+                  className="block text-sm font-medium text-gray-700"
+                >
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  className="mt-1 p-2 w-full border rounded-md"
+                />
+              </div>
+              <div>
+                <label
                   htmlFor="message"
+                  className="block text-sm font-medium text-gray-700"
                 >
                   Message
                 </label>
                 <textarea
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="message"
-                  placeholder="Your Message"
-                  rows="4"
+                  name="message"
+                  rows="3"
+                  className="mt-1 p-2 w-full border rounded-md"
                 ></textarea>
               </div>
-              <button
-                className="bg-[rgb(248,87,87)] hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                type="submit"
-              >
-                Send Message
-              </button>
+              <div>
+                <button
+                  type="submit"
+                  style={{
+                    width: "100%",
+                    padding: "20px 40px",
+                    borderRadius: "12px",
+                    color: "white",
+                    backgroundColor: "#f85757",
+                    boxShadow: "0 2px 12px 0 rgba(20, 20, 43, 0.07)",
+                    transform: "scale3d(1, 1, 1.01)",
+                    transition:
+                      "box-shadow 300ms ease, color 300ms ease, background-color 300ms ease, transform 300ms ease",
+                  }}
+                >
+                  Send Message
+                </button>
+              </div>
             </form>
+
+            {/* Agent details */}
+            <div className="mt-8 border-t pt-8">
+              <h3 className="text-lg font-semibold">Agent: John Doe</h3>
+              <p>Email: johndoe@example.com</p>
+              <p>Phone: (123) 456-7890</p>
+            </div>
           </div>
         </div>
       </div>
+
+      {toastMessage && (
+        <div className="fixed top-20 right-0 mt-4 mr-4 p-4 rounded bg-green-500 text-white">
+          {toastMessage}
+        </div>
+      )}
     </div>
   );
 }

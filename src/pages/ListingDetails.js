@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { db } from "../firebase";
 import { doc, getDoc } from "firebase/firestore";
@@ -15,6 +15,56 @@ function ListingDetails() {
   const [property, setProperty] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [toastMessage, setToastMessage] = useState(null);
+  const formRef = useRef(null);
+  const [message, setMessage] = useState("");
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+
+    // Capture the form data
+    const formData = new FormData(event.target);
+    const name = formData.get("name");
+    const email = formData.get("email");
+    const phone = formData.get("phone");
+    const message = formData.get("message");
+
+    // Send data to Firebase Cloud Function
+    try {
+      const response = await fetch(
+        "https://us-central1-lexi-b90dd.cloudfunctions.net/sendEmail",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            phone,
+            message,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (result.success) {
+        console.log("Email sent successfully.");
+        setToastMessage("Email sent successfully.");
+        formRef.current.reset(); // Reset the form values
+        setTimeout(() => {
+          setToastMessage(null);
+        }, 3000); // Clears the toast after 3 seconds
+      } else {
+        console.error("Error sending email:", result.error);
+        // Show an error message to the user.
+      }
+    } catch (error) {
+      console.error("Failed to send email:", error);
+      // Show an error message to the user.
+    }
+  };
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -52,6 +102,9 @@ function ListingDetails() {
         }
 
         setProperty(propertyData);
+        setMessage(
+          `I am interested in the property at ${propertyData.address}, ${propertyData.city}. Please contact me.`
+        );
       } else {
         console.log("No such property!");
       }
@@ -273,7 +326,11 @@ function ListingDetails() {
             {/* Contact Form */}
             <div className="mt-8">
               <h3 className="text-lg font-semibold mb-4">Contact the Agent</h3>
-              <form className="space-y-4">
+              <form
+                className="space-y-4"
+                onSubmit={handleFormSubmit}
+                ref={formRef}
+              >
                 <div>
                   <label
                     htmlFor="name"
@@ -327,7 +384,9 @@ function ListingDetails() {
                     id="message"
                     name="message"
                     rows="3"
-                    className="mt-1 p-2 w-full border rounded-md"
+                    className="mt-1 p-2 w-full border rounded-md text-gray-400"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
                   ></textarea>
                 </div>
                 <div>
@@ -360,6 +419,12 @@ function ListingDetails() {
           </div>
         </div>
       </section>
+
+      {toastMessage && (
+        <div className="fixed top-20 right-0 mt-4 mr-4 p-4 rounded bg-green-500 text-white">
+          {toastMessage}
+        </div>
+      )}
     </div>
   );
 }
