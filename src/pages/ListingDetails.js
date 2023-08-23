@@ -76,6 +76,8 @@ function ListingDetails() {
 
   useEffect(() => {
     const fetchProperty = async () => {
+      console.log("[useEffect] Fetching property data...");
+
       const propertyRef = doc(db, "properties", id);
       const propertyDoc = await getDoc(propertyRef);
 
@@ -138,22 +140,28 @@ function ListingDetails() {
   };
 
   const handleMapLoad = (map) => {
+    console.log("[handleMapLoad] Map loaded...");
+
     googleRef.current = window.google;
     placesServiceRef.current = new googleRef.current.maps.places.PlacesService(
       map
     );
-    console.log("Map loaded and refs set!");
+    console.log("[handleMapLoad] Google and PlacesService refs set!");
   };
 
   useEffect(() => {
+    console.log("[useEffect] Checking if we should fetch nearby places...");
+
     if (property && googleRef.current && placesServiceRef.current) {
-      console.log("Fetching nearby places for:", property.lat, property.lng);
+      console.log("[useEffect] Fetching nearby places...");
       fetchNearbyPlaces(property.lat, property.lng, "school").then(setSchools);
       fetchNearbyPlaces(property.lat, property.lng, "park").then(setParks);
     }
   }, [property]);
 
   const fetchNearbyPlaces = (lat, lng, type) => {
+    console.log(`[fetchNearbyPlaces] Fetching nearby ${type}...`);
+
     return new Promise((resolve, reject) => {
       const location = new googleRef.current.maps.LatLng(lat, lng);
       const request = {
@@ -277,6 +285,7 @@ function ListingDetails() {
     );
 
   console.log("Latitude:", property.lat, "Longitude:", property.lng);
+  console.log("Rendering ListingDetails...");
 
   return (
     <div className="relative p-4 md:p-0">
