@@ -151,11 +151,18 @@ function ListingDetails() {
 
   useEffect(() => {
     console.log("[useEffect] Checking if we should fetch nearby places...");
+    console.log("googleRef:", googleRef.current);
+    console.log("placesServiceRef:", placesServiceRef.current);
 
     if (property && googleRef.current && placesServiceRef.current) {
-      console.log("[useEffect] Fetching nearby places...");
-      fetchNearbyPlaces(property.lat, property.lng, "school").then(setSchools);
-      fetchNearbyPlaces(property.lat, property.lng, "park").then(setParks);
+      // Introducing a delay of 2 seconds before fetching
+      setTimeout(() => {
+        console.log("[useEffect] Fetching nearby places after delay...");
+        fetchNearbyPlaces(property.lat, property.lng, "school").then(
+          setSchools
+        );
+        fetchNearbyPlaces(property.lat, property.lng, "park").then(setParks);
+      }, 2000);
     }
   }, [property]);
 
