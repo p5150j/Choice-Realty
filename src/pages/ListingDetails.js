@@ -142,57 +142,14 @@ function ListingDetails() {
     placesServiceRef.current = new googleRef.current.maps.places.PlacesService(
       map
     );
-
-    if (googleRef.current) {
-      console.log("googleRef set successfully.");
-    } else {
-      console.log("Failed to set googleRef.");
-    }
-
-    if (placesServiceRef.current) {
-      console.log("placesServiceRef set successfully.");
-    } else {
-      console.log("Failed to set placesServiceRef.");
-    }
-
-    if (
-      googleRef.current &&
-      googleRef.current.maps &&
-      googleRef.current.maps.places
-    ) {
-      console.log("Google Maps Places API is accessible.");
-    } else {
-      console.log("Google Maps Places API is not accessible.");
-    }
-
     console.log("Map loaded and refs set!");
   };
 
   useEffect(() => {
-    if (property) {
-      console.log("Property data is available.");
-
-      if (googleRef.current) {
-        console.log("googleRef is set and ready.");
-      } else {
-        console.log("googleRef is not set.");
-      }
-
-      if (placesServiceRef.current) {
-        console.log("placesServiceRef is set and ready.");
-      } else {
-        console.log("placesServiceRef is not set.");
-      }
-
-      if (googleRef.current && placesServiceRef.current) {
-        console.log("Fetching nearby places for:", property.lat, property.lng);
-        fetchNearbyPlaces(property.lat, property.lng, "school").then(
-          setSchools
-        );
-        fetchNearbyPlaces(property.lat, property.lng, "park").then(setParks);
-      }
-    } else {
-      console.log("Property data is not yet available.");
+    if (property && googleRef.current && placesServiceRef.current) {
+      console.log("Fetching nearby places for:", property.lat, property.lng);
+      fetchNearbyPlaces(property.lat, property.lng, "school").then(setSchools);
+      fetchNearbyPlaces(property.lat, property.lng, "park").then(setParks);
     }
   }, [property]);
 
