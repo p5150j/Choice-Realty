@@ -169,7 +169,7 @@ function ListingDetails() {
         fetchNearbyPlaces(property.lat, property.lng, "park").then(setParks);
       }, 2000);
     }
-  }, [property]);
+  }, [property, googleRef.current, placesServiceRef.current]);
 
   const fetchNearbyPlaces = (lat, lng, type) => {
     console.log(`[fetchNearbyPlaces] Fetching nearby ${type}...`);
