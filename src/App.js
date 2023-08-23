@@ -18,7 +18,14 @@ const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 function App() {
   return (
-    <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={["places"]}>
+    <LoadScript
+      googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+      libraries={["places"]}
+      onLoad={() => console.log("Google Maps scripts loaded successfully.")}
+      onError={(error) =>
+        console.error("Error loading Google Maps scripts:", error)
+      }
+    >
       <Router>
         <div className="font-sans antialiased text-gray-900">
           <Navigation />
