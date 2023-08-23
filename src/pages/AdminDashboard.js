@@ -94,7 +94,7 @@ function AdminDashboard() {
   }, []);
 
   const inputStyle =
-    "w-full min-h-[83px] px-14 py-4 border border-white rounded-lg bg-white shadow-md";
+    "w-full min-h-[23px] px-14 py-4 border border-white rounded-lg bg-white shadow-md";
 
   return (
     <div className="p-4 relative">
@@ -221,51 +221,43 @@ function AdminDashboard() {
           className={`${inputStylez} mb-4`}
         />
 
-        <table className="min-w-full bg-white border rounded-lg">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 border">Image</th>
-              <th className="py-2 px-4 border">Title</th>
-              <th className="py-2 px-4 border">Address</th>
-              <th className="py-2 px-4 border">City</th>
-              <th className="py-2 px-4 border">State</th>
-              <th className="py-2 px-4 border">Price</th>
-              <th className="py-2 px-4 border">Sqft</th>
-            </tr>
-          </thead>
-          <tbody>
-            {properties
-              .filter((prop) => {
-                return (
-                  prop.title
-                    .toLowerCase()
-                    .includes(searchQuery.toLowerCase()) ||
-                  prop.address
-                    .toLowerCase()
-                    .includes(searchQuery.toLowerCase()) ||
-                  prop.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                  prop.state.toLowerCase().includes(searchQuery.toLowerCase())
-                );
-              })
-              .map((prop) => (
-                <tr key={prop.id}>
-                  <td className="py-2 px-4 border">
-                    <img
-                      src={prop.images[0]}
-                      alt={prop.title}
-                      className="w-24 h-24 object-cover"
-                    />
-                  </td>
-                  <td className="py-2 px-4 border">{prop.title}</td>
-                  <td className="py-2 px-4 border">{prop.address}</td>
-                  <td className="py-2 px-4 border">{prop.city}</td>
-                  <td className="py-2 px-4 border">{prop.state}</td>
-                  <td className="py-2 px-4 border">{prop.price}</td>
-                  <td className="py-2 px-4 border">{prop.sqft}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {properties
+            .filter((prop) => {
+              return (
+                prop.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                prop.address
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase()) ||
+                prop.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                prop.state.toLowerCase().includes(searchQuery.toLowerCase())
+              );
+            })
+            .map((prop) => (
+              <div key={prop.id} className="bg-white p-4 rounded-lg shadow-md">
+                <img
+                  src={prop.images[0]}
+                  alt={prop.title}
+                  className="w-full h-48 object-cover mb-4 rounded"
+                />
+                <h4 className="text-lg font-bold mb-2">{prop.title}</h4>
+                <p className="text-gray-600 mb-2">{prop.address}</p>
+                <p className="text-gray-600 mb-2">
+                  {prop.city}, {prop.state}
+                </p>
+                <p className="text-gray-600 mb-2">${prop.price}</p>
+                <p className="text-gray-600 mb-4">{prop.sqft} sqft</p>
+                <div className="flex justify-end space-x-2">
+                  <button className="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
+                    Edit
+                  </button>
+                  <button className="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
     </div>
   );

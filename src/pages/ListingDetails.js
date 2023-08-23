@@ -6,18 +6,26 @@ import Modal from "react-modal";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker } from "@react-google-maps/api";
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 function ListingDetails() {
+  // State variables
   const { id } = useParams();
   const [property, setProperty] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [toastMessage, setToastMessage] = useState(null);
-  const formRef = useRef(null);
+  const [schools, setSchools] = useState([]);
+  const [parks, setParks] = useState([]);
   const [message, setMessage] = useState("");
+  const [mapsLoaded, setMapsLoaded] = useState(false);
+
+  // Refs for DOM elements and external services
+  const formRef = useRef(null);
+  const googleRef = useRef(null);
+  const placesServiceRef = useRef(null);
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -122,6 +130,41 @@ function ListingDetails() {
     setModalIsOpen(false);
   };
 
+  const handleMapLoad = (map) => {
+    googleRef.current = window.google;
+    placesServiceRef.current = new googleRef.current.maps.places.PlacesService(
+      map
+    );
+    console.log("Map loaded and refs set!");
+  };
+
+  useEffect(() => {
+    if (property && googleRef.current && placesServiceRef.current) {
+      console.log("Fetching nearby places for:", property.lat, property.lng);
+      fetchNearbyPlaces(property.lat, property.lng, "school").then(setSchools);
+      fetchNearbyPlaces(property.lat, property.lng, "park").then(setParks);
+    }
+  }, [property]);
+
+  const fetchNearbyPlaces = (lat, lng, type) => {
+    return new Promise((resolve, reject) => {
+      const location = new googleRef.current.maps.LatLng(lat, lng);
+      const request = {
+        location: location,
+        radius: "2000",
+        type: type,
+      };
+
+      placesServiceRef.current.nearbySearch(request, (results, status) => {
+        if (status === googleRef.current.maps.places.PlacesServiceStatus.OK) {
+          resolve(results);
+        } else {
+          reject(new Error(`Failed to fetch nearby ${type}`));
+        }
+      });
+    });
+  };
+
   const settings = {
     dots: false,
     infinite: true,
@@ -194,7 +237,12 @@ function ListingDetails() {
     return (
       <GoogleMap
         key={Date.now()}
-        onLoad={() => console.log("Map loaded!")}
+        onLoad={(map) => {
+          console.log("Map loaded!");
+          googleRef.current = window.google;
+          placesServiceRef.current =
+            new window.google.maps.places.PlacesService(map);
+        }}
         mapContainerStyle={{ width: "100%", height: "400px" }}
         center={{ lat: property.lat, lng: property.lng }}
         zoom={15}
@@ -226,7 +274,7 @@ function ListingDetails() {
       />
 
       <section className="py-8 mt-4 container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
           {/* Left Column */}
           <div className="col-span-2 space-y-8">
             {/* Address and Title */}
@@ -254,7 +302,7 @@ function ListingDetails() {
                   <span>{property.bathrooms}</span>
                 </div>
                 <div className="flex items-center space-x-2 bg-gray-200 px-3 py-1 rounded">
-                  <ion-icon name="car-outline"></ion-icon>
+                  <ion-icon name="bookmark-outline"></ion-icon>
                   <span>{property.propertyType}</span>
                 </div>
               </div>
@@ -262,20 +310,6 @@ function ListingDetails() {
               {/* Description */}
               <div>
                 <p>{property.description}</p>
-              </div>
-
-              {/* Amenities */}
-              <div>
-                <h3 className="text-xl font-semibold mb-4">Amenities:</h3>
-                <ul className="list-disc pl-5">
-                  {property.amenities && property.amenities.length > 0 ? (
-                    property.amenities.map((amenity, index) => (
-                      <li key={index}>{amenity}</li>
-                    ))
-                  ) : (
-                    <li>No amenities listed.</li>
-                  )}
-                </ul>
               </div>
 
               {/* Gallery Grid View */}
@@ -289,6 +323,46 @@ function ListingDetails() {
                     onClick={() => openModal(index)}
                   />
                 ))}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-white p-4 rounded shadow-md">
+                  <h3 className="text-lg font-semibold mb-4">
+                    Nearby Schools:
+                  </h3>
+                  <ul>
+                    {schools.map((school, index) => (
+                      <li
+                        key={index}
+                        className="flex justify-between items-center mb-2 text-sm"
+                      >
+                        <span>{school.name}</span>
+                        <span className="px-2 py-1 bg-gray-200 rounded">
+                          {Math.round(school.rating * 20) || "N/A"} %{" "}
+                          <ion-icon name="thumbs-up-outline"></ion-icon>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="bg-white p-4 rounded shadow-md">
+                  <h3 className="text-lg font-semibold mb-4">Nearby Parks:</h3>
+                  <ul>
+                    {parks.map((park, index) => (
+                      <li
+                        key={index}
+                        className="flex justify-between items-center mb-2 text-sm"
+                      >
+                        <span>{park.name}</span>
+                        <span className="px-2 py-1 bg-gray-200 rounded">
+                          {Math.round(park.rating * 20) || "N/A"}{" "}
+                          <ion-icon name="thumbs-up-outline"></ion-icon>
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
 
               {/* Image Carousel Modal */}
@@ -318,7 +392,12 @@ function ListingDetails() {
             {/* Rent and Contact */}
             <div className="space-y-4">
               <div>
-                <span className="text-xl font-bold">{`$${property.price}`}</span>
+                <span
+                  className="text-xl font-bold"
+                  style={{ color: "rgb(248, 87, 87)" }}
+                >
+                  {`$${property.price}`}
+                </span>
                 <span className="text-gray-600"></span>
               </div>
             </div>

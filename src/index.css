@@ -46,3 +46,22 @@
     transform: scale(1.1); /* This scales the image up by 10% on hover */
 }
 
+
+.slick-prev, .slick-next{
+  font-size: 0;
+  line-height: 0;
+  position: absolute;
+  top: 50%;
+  display: block;
+  width: 77px!important;
+  height: 69px!important;
+  padding: 0;
+  transform: translate(0, -50%);
+  cursor: pointer;
+  color: transparent;
+  border: none;
+  outline: none;
+  background: rgb(248, 87, 87)!important;
+  z-index: 9999;
+}
+
