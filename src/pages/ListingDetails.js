@@ -155,10 +155,17 @@ function ListingDetails() {
         type: type,
       };
 
+      // Log the request object
+      console.log(`Fetching ${type} with request:`, request);
+
       placesServiceRef.current.nearbySearch(request, (results, status) => {
         if (status === googleRef.current.maps.places.PlacesServiceStatus.OK) {
+          // Log the results
+          console.log(`Fetched ${type} successfully:`, results);
           resolve(results);
         } else {
+          // Log the error status
+          console.error(`Failed to fetch nearby ${type} with status:`, status);
           reject(new Error(`Failed to fetch nearby ${type}`));
         }
       });
