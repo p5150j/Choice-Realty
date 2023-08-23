@@ -65,3 +65,12 @@
   z-index: 9999;
 }
 
+
+.calendly-inline-widget button {
+  background-color: rgb(248, 87, 87)!important;
+}
+
+.calendly-inline-widget{
+   min-width: 320px;
+    height: 1090px!important;
+}

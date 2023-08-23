@@ -7,6 +7,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { GoogleMap, Marker } from "@react-google-maps/api";
+import { InlineWidget } from "react-calendly";
 
 const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
@@ -25,6 +26,9 @@ function ListingDetails() {
   // Refs for DOM elements and external services
   const formRef = useRef(null);
   const googleRef = useRef(null);
+
+  const [calendlyModalIsOpen, setCalendlyModalIsOpen] = useState(false);
+
   const placesServiceRef = useRef(null);
 
   const handleFormSubmit = async (event) => {
@@ -139,6 +143,13 @@ function ListingDetails() {
     setModalIsOpen(false);
   };
 
+  const openCalendlyModal = () => {
+    setCalendlyModalIsOpen(true);
+  };
+
+  const closeCalendlyModal = () => {
+    setCalendlyModalIsOpen(false);
+  };
   // const handleMapLoad = (map) => {
   //   console.log("[handleMapLoad] Map loaded...");
 
@@ -526,13 +537,52 @@ function ListingDetails() {
                   </button>
                 </div>
               </form>
-
+              <div className="flex items-center mt-4">
+                <hr className="flex-grow border-t border-gray-400 mx-2" />
+                <span className="text-gray-600">or</span>
+                <hr className="flex-grow border-t border-gray-400 mx-2" />
+              </div>
+              <button
+                onClick={openCalendlyModal}
+                className="mt-4 btn"
+                style={{
+                  width: "100%",
+                  padding: "20px 40px",
+                  borderRadius: "12px",
+                  color: "white",
+                  backgroundColor: "#f85757",
+                  boxShadow: "0 2px 12px 0 rgba(20, 20, 43, 0.07)",
+                  transform: "scale3d(1, 1, 1.01)",
+                  transition:
+                    "box-shadow 300ms ease, color 300ms ease, background-color 300ms ease, transform 300ms ease",
+                }}
+              >
+                Schedule a Showing
+              </button>
               {/* Agent details */}
               <div className="mt-8 border-t pt-8">
                 <h3 className="text-lg font-semibold">Agent: John Doe</h3>
                 <p>Email: johndoe@example.com</p>
                 <p>Phone: (123) 456-7890</p>
               </div>
+              <Modal
+                ariaHideApp={false}
+                isOpen={calendlyModalIsOpen}
+                onRequestClose={closeCalendlyModal}
+                contentLabel="Schedule Showing"
+                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-[320px] md:w-3/4 h-[1090px] bg-white rounded-lg shadow-lg overflow-y-auto"
+              >
+                <InlineWidget
+                  url="https://calendly.com/patrick-ortell/call-with-patrick"
+                  prefill={{
+                    name: "Default Name", // This can be dynamic if you have the user's name
+                    email: "default@email.com", // This can be dynamic if you have the user's email
+                    customAnswers: {
+                      a1: `${property.address}, ${property.city}`, // This will prefill the address of the property in the Calendly custom answer
+                    },
+                  }}
+                />
+              </Modal>
             </div>
           </div>
         </div>

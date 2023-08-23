@@ -20,7 +20,7 @@ function App() {
   return (
     <LoadScript
       googleMapsApiKey={GOOGLE_MAPS_API_KEY}
-      libraries={["places"]}
+      // libraries={["places"]}
       onLoad={() => console.log("Google Maps scripts loaded successfully.")}
       onError={(error) =>
         console.error("Error loading Google Maps scripts:", error)
