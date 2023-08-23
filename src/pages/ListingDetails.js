@@ -139,56 +139,63 @@ function ListingDetails() {
     setModalIsOpen(false);
   };
 
-  const handleMapLoad = (map) => {
-    console.log("[handleMapLoad] Map loaded...");
+  // const handleMapLoad = (map) => {
+  //   console.log("[handleMapLoad] Map loaded...");
 
-    if (!googleRef.current) {
-      googleRef.current = window.google;
-    }
+  //   if (!googleRef.current) {
+  //     googleRef.current = window.google;
+  //   }
 
-    if (!placesServiceRef.current && googleRef.current) {
-      placesServiceRef.current =
-        new googleRef.current.maps.places.PlacesService(map);
-      console.log("[handleMapLoad] Google and PlacesService refs set!");
-    }
-  };
+  //   if (!placesServiceRef.current && googleRef.current) {
+  //     try {
+  //       placesServiceRef.current =
+  //         new googleRef.current.maps.places.PlacesService(map);
+  //       console.log("[handleMapLoad] Google and PlacesService refs set!");
+  //     } catch (error) {
+  //       console.error(
+  //         "[handleMapLoad] Error initializing PlacesService:",
+  //         error
+  //       );
+  //     }
+  //   }
+  // };
 
-  useEffect(() => {
-    console.log("[useEffect] Checking if we should fetch nearby places...");
-    if (property && googleRef.current && placesServiceRef.current) {
-      console.log("[useEffect] Fetching nearby places...");
-      fetchNearbyPlaces(property.lat, property.lng, "school").then(setSchools);
-      fetchNearbyPlaces(property.lat, property.lng, "park").then(setParks);
-    }
-  }, [property]);
+  // useEffect(() => {
+  //   console.log("[useEffect] Checking if we should fetch nearby places...");
+  //   if (property && googleRef.current && placesServiceRef.current) {
+  //     console.log("[useEffect] Fetching nearby places...");
+  //     fetchNearbyPlaces(property.lat, property.lng, "school").then(setSchools);
+  //     fetchNearbyPlaces(property.lat, property.lng, "park").then(setParks);
+  //   }
+  // }, [property]);
 
-  const fetchNearbyPlaces = (lat, lng, type) => {
-    console.log(`[fetchNearbyPlaces] Fetching nearby ${type}...`);
+  // const fetchNearbyPlaces = (lat, lng, type) => {
+  //   console.log(`[fetchNearbyPlaces] Fetching nearby ${type}...`);
 
-    return new Promise((resolve, reject) => {
-      const location = new googleRef.current.maps.LatLng(lat, lng);
-      const request = {
-        location: location,
-        radius: "2000",
-        type: type,
-      };
+  //   return new Promise((resolve, reject) => {
+  //     const location = new googleRef.current.maps.LatLng(lat, lng);
+  //     const request = {
+  //       location: location,
+  //       radius: "2000",
+  //       type: type,
+  //     };
 
-      // Log the request object
-      console.log(`Fetching ${type} with request:`, request);
+  //     // Log the request object
+  //     console.log(`Fetching ${type} with request:`, request);
 
-      placesServiceRef.current.nearbySearch(request, (results, status) => {
-        if (status === googleRef.current.maps.places.PlacesServiceStatus.OK) {
-          // Log the results
-          console.log(`Fetched ${type} successfully:`, results);
-          resolve(results);
-        } else {
-          // Log the error status
-          console.error(`Failed to fetch nearby ${type} with status:`, status);
-          reject(new Error(`Failed to fetch nearby ${type}`));
-        }
-      });
-    });
-  };
+  //     placesServiceRef.current.nearbySearch(request, (results, status) => {
+  //       if (status === googleRef.current.maps.places.PlacesServiceStatus.OK) {
+  //         // Log the results
+  //         console.log(`Fetched ${type} successfully:`, results);
+  //         resolve(results);
+  //       } else {
+  //         // Log the error status
+  //         console.error(`Failed to fetch nearby ${type} with status:`, status);
+  //         reject(new Error(`Failed to fetch nearby ${type}`));
+  //       }
+  //     });
+  //   });
+  // };
 
   const settings = {
     dots: false,
@@ -262,18 +269,18 @@ function ListingDetails() {
     return (
       <GoogleMap
         key={Date.now()}
-        onLoad={(map) => {
-          console.log("[onLoad] Google Map onLoad triggered!");
-          googleRef.current = window.google;
-          if (!placesServiceRef.current && googleRef.current) {
-            placesServiceRef.current =
-              new googleRef.current.maps.places.PlacesService(map);
-            console.log(
-              "[onLoad] Set placesServiceRef:",
-              placesServiceRef.current
-            );
-          }
-        }}
+        // onLoad={(map) => {
+        //   console.log("[onLoad] Google Map onLoad triggered!");
+        //   googleRef.current = window.google;
+        //   if (!placesServiceRef.current && googleRef.current) {
+        //     placesServiceRef.current =
+        //       new googleRef.current.maps.places.PlacesService(map);
+        //     console.log(
+        //       "[onLoad] Set placesServiceRef:",
+        //       placesServiceRef.current
+        //     );
+        //   }
+        // }}
         mapContainerStyle={{ width: "100%", height: "400px" }}
         center={{ lat: property.lat, lng: property.lng }}
         zoom={15}
@@ -357,7 +364,7 @@ function ListingDetails() {
                 ))}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-white p-4 rounded shadow-md">
                   <h3 className="text-lg font-semibold mb-4">
                     Nearby Schools:
@@ -395,7 +402,7 @@ function ListingDetails() {
                     ))}
                   </ul>
                 </div>
-              </div>
+              </div> */}
 
               {/* Image Carousel Modal */}
               <Modal
