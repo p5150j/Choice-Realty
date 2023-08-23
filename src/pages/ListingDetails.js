@@ -159,15 +159,6 @@ function ListingDetails() {
       console.log("[useEffect] Re-initialized googleRef:", googleRef.current);
     }
 
-    if (!placesServiceRef.current && googleRef.current) {
-      placesServiceRef.current =
-        new googleRef.current.maps.places.PlacesService(map);
-      console.log(
-        "[useEffect] Re-initialized placesServiceRef:",
-        placesServiceRef.current
-      );
-    }
-
     if (property && googleRef.current && placesServiceRef.current) {
       // Introducing a delay of 2 seconds before fetching
       setTimeout(() => {
@@ -283,13 +274,14 @@ function ListingDetails() {
         onLoad={(map) => {
           console.log("[onLoad] Google Map onLoad triggered!");
           googleRef.current = window.google;
-          placesServiceRef.current =
-            new window.google.maps.places.PlacesService(map);
-          console.log("[onLoad] Set googleRef:", googleRef.current);
-          console.log(
-            "[onLoad] Set placesServiceRef:",
-            placesServiceRef.current
-          );
+          if (!placesServiceRef.current && googleRef.current) {
+            placesServiceRef.current =
+              new googleRef.current.maps.places.PlacesService(map);
+            console.log(
+              "[onLoad] Set placesServiceRef:",
+              placesServiceRef.current
+            );
+          }
         }}
         mapContainerStyle={{ width: "100%", height: "400px" }}
         center={{ lat: property.lat, lng: property.lng }}
