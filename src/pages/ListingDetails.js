@@ -142,34 +142,25 @@ function ListingDetails() {
   const handleMapLoad = (map) => {
     console.log("[handleMapLoad] Map loaded...");
 
-    googleRef.current = window.google;
-    placesServiceRef.current = new googleRef.current.maps.places.PlacesService(
-      map
-    );
-    console.log("[handleMapLoad] Google and PlacesService refs set!");
+    if (!googleRef.current) {
+      googleRef.current = window.google;
+    }
+
+    if (!placesServiceRef.current && googleRef.current) {
+      placesServiceRef.current =
+        new googleRef.current.maps.places.PlacesService(map);
+      console.log("[handleMapLoad] Google and PlacesService refs set!");
+    }
   };
 
   useEffect(() => {
     console.log("[useEffect] Checking if we should fetch nearby places...");
-    console.log("googleRef:", googleRef.current);
-    console.log("placesServiceRef:", placesServiceRef.current);
-
-    if (!googleRef.current) {
-      googleRef.current = window.google;
-      console.log("[useEffect] Re-initialized googleRef:", googleRef.current);
-    }
-
     if (property && googleRef.current && placesServiceRef.current) {
-      // Introducing a delay of 2 seconds before fetching
-      setTimeout(() => {
-        console.log("[useEffect] Fetching nearby places after delay...");
-        fetchNearbyPlaces(property.lat, property.lng, "school").then(
-          setSchools
-        );
-        fetchNearbyPlaces(property.lat, property.lng, "park").then(setParks);
-      }, 2000);
+      console.log("[useEffect] Fetching nearby places...");
+      fetchNearbyPlaces(property.lat, property.lng, "school").then(setSchools);
+      fetchNearbyPlaces(property.lat, property.lng, "park").then(setParks);
     }
-  }, [property, googleRef.current, placesServiceRef.current]);
+  }, [property]);
 
   const fetchNearbyPlaces = (lat, lng, type) => {
     console.log(`[fetchNearbyPlaces] Fetching nearby ${type}...`);
